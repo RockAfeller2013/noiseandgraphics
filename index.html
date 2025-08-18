@@ -1,99 +1,93 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>Reveal.js Videos with Menu</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.0/dist/reveal.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.0/dist/theme/black.css">
-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Full-Screen Autoplay Videos + Menu</title>
   <style>
-    video {
-      width: 100vw;
-      height: 100vh;
-      object-fit: cover;
-    }
+    html, body { margin:0; padding:0; height:100%; width:100%; background:#000; scroll-behavior:smooth; }
+    video { width:100vw; height:100vh; object-fit:cover; display:block; }
 
-    /* Burger menu */
-    .menu {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      z-index: 9999;
-    }
-
+    /* Floating burger menu */
+    .menu { position:fixed; top:16px; right:16px; z-index:9999; }
     .menu button {
-      font-size: 28px;
-      background: #222;
-      color: #fff;
-      border: none;
-      border-radius: 6px;
-      padding: 6px 10px;
-      cursor: pointer;
+      font:inherit; font-size:24px; line-height:1;
+      background:#111; color:#fff; border:1px solid #444; border-radius:8px;
+      padding:8px 10px; cursor:pointer;
     }
-
     .menu ul {
-      display: none;
-      position: absolute;
-      top: 50px;
-      right: 0;
-      background: rgba(0, 0, 0, 0.9);
-      list-style: none;
-      margin: 0;
-      padding: 10px;
-      border-radius: 6px;
+      list-style:none; margin:8px 0 0; padding:8px;
+      background:rgba(0,0,0,0.9); border:1px solid #444; border-radius:8px;
+      display:none; min-width:160px;
     }
-
-    .menu ul li {
-      margin: 5px 0;
-    }
-
-    .menu ul li a {
-      color: #fff;
-      text-decoration: none;
-      font-size: 16px;
-      cursor: pointer;
-    }
-
-    .menu ul.show {
-      display: block;
-    }
+    .menu ul.show { display:block; }
+    .menu li { margin:6px 0; }
+    .menu a { color:#fff; text-decoration:none; font-size:14px; }
+    .menu a:hover { text-decoration:underline; }
   </style>
 </head>
 <body>
-  <!-- Floating Menu -->
-  <div class="menu">
-    <button id="menuBtn">&#9776;</button>
-    <ul id="menuList">
-      <li><a onclick="Reveal.slide(0)">Video 1</a></li>
-      <li><a onclick="Reveal.slide(1)">Video 2</a></li>
-      <li><a onclick="Reveal.slide(2)">Video 3</a></li>
-      <li><a onclick="Reveal.slide(3)">Video 4</a></li>
+
+  <!-- Floating menu -->
+  <nav class="menu" aria-label="Video navigation">
+    <button id="menuBtn" aria-haspopup="true" aria-expanded="false">☰</button>
+    <ul id="menuList" role="menu">
+      <li><a href="#v1" role="menuitem">Video 1 — Forest</a></li>
+      <li><a href="#v2" role="menuitem">Video 2 — Forest Snow</a></li>
+      <li><a href="#v3" role="menuitem">Video 3 — Slider Effects</a></li>
+      <li><a href="#v4" role="menuitem">Video 4 — Circle</a></li>
     </ul>
-  </div>
+  </nav>
 
-  <div class="reveal">
-    <div class="slides">
-      <section><video src="video1.mp4" autoplay muted loop playsinline></video></section>
-      <section><video src="video2.mp4" autoplay muted loop playsinline></video></section>
-      <section><video src="video3.mp4" autoplay muted loop playsinline></video></section>
-      <section><video src="video4.mp4" autoplay muted loop playsinline></video></section>
-    </div>
-  </div>
+  <!-- Stacked full-viewport videos (unchanged) -->
+  <video id="v1" loop muted autoplay playsinline>
+    <source src="https://fp-assets.alvarotrigo.com/videos/forest.mp4" type="video/mp4">
+    <source src="https://fp-assets.alvarotrigo.com/videos/forest.webm" type="video/webm">
+  </video>
 
-  <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.6.0/dist/reveal.js"></script>
+  <video id="v2" loop muted autoplay playsinline>
+    <source src="https://fp-assets.alvarotrigo.com/videos/forest-snow.mp4" type="video/mp4">
+    <source src="https://fp-assets.alvarotrigo.com/videos/forest-snow.webm" type="video/webm">
+  </video>
+
+  <video id="v3" loop muted autoplay playsinline>
+    <source src="https://fp-assets.alvarotrigo.com/videos/slider-effects.mp4" type="video/mp4">
+    <source src="https://fp-assets.alvarotrigo.com/videos/slider-effects.webm" type="video/webm">
+  </video>
+
+  <video id="v4" loop muted autoplay playsinline>
+    <source src="https://fp-assets.alvarotrigo.com/videos/circle.mp4" type="video/mp4">
+    <source src="https://fp-assets.alvarotrigo.com/videos/circle.webm" type="video/webm">
+  </video>
+
   <script>
-    Reveal.initialize({
-      hash: true,
-      controls: false,
-      progress: false,
-      slideNumber: false,
-      keyboard: true
+    // Ensure autoplay
+    document.querySelectorAll('video').forEach(v => {
+      v.muted = true;
+      v.play().catch(() => {});
     });
 
-    // Toggle burger menu
-    document.getElementById('menuBtn').onclick = function() {
-      document.getElementById('menuList').classList.toggle('show');
-    };
+    // Burger toggle + close on outside click
+    const btn = document.getElementById('menuBtn');
+    const list = document.getElementById('menuList');
+    btn.addEventListener('click', () => {
+      const show = !list.classList.contains('show');
+      list.classList.toggle('show', show);
+      btn.setAttribute('aria-expanded', String(show));
+    });
+    document.addEventListener('click', (e) => {
+      if (!document.querySelector('.menu').contains(e.target)) {
+        list.classList.remove('show');
+        btn.setAttribute('aria-expanded', 'false');
+      }
+    });
+    // Close menu after selecting a link
+    list.addEventListener('click', (e) => {
+      if (e.target.tagName === 'A') {
+        list.classList.remove('show');
+        btn.setAttribute('aria-expanded', 'false');
+      }
+    });
   </script>
 </body>
 </html>
