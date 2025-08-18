@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Full-Screen Autoplay Videos + Menu</title>
+  <title>Full-Screen Autoplay Videos + Persistent Menu</title>
   <style>
     html, body { margin:0; padding:0; height:100%; width:100%; background:#000; scroll-behavior:smooth; }
     video { width:100vw; height:100vh; object-fit:cover; display:block; }
@@ -39,7 +39,7 @@
     </ul>
   </nav>
 
-  <!-- Stacked full-viewport videos (unchanged) -->
+  <!-- Stacked full-viewport videos -->
   <video id="v1" loop muted autoplay playsinline>
     <source src="https://fp-assets.alvarotrigo.com/videos/forest.mp4" type="video/mp4">
     <source src="https://fp-assets.alvarotrigo.com/videos/forest.webm" type="video/webm">
@@ -67,26 +67,13 @@
       v.play().catch(() => {});
     });
 
-    // Burger toggle + close on outside click
+    // Burger toggle (persistent until toggled again)
     const btn = document.getElementById('menuBtn');
     const list = document.getElementById('menuList');
     btn.addEventListener('click', () => {
       const show = !list.classList.contains('show');
       list.classList.toggle('show', show);
       btn.setAttribute('aria-expanded', String(show));
-    });
-    document.addEventListener('click', (e) => {
-      if (!document.querySelector('.menu').contains(e.target)) {
-        list.classList.remove('show');
-        btn.setAttribute('aria-expanded', 'false');
-      }
-    });
-    // Close menu after selecting a link
-    list.addEventListener('click', (e) => {
-      if (e.target.tagName === 'A') {
-        list.classList.remove('show');
-        btn.setAttribute('aria-expanded', 'false');
-      }
     });
   </script>
 </body>
