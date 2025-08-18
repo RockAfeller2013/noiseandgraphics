@@ -1,55 +1,99 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Full-Screen Autoplay Videos</title>
-  <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      width: 100%;
-      background: #000;
-    }
+  <meta charset="utf-8">
+  <title>Reveal.js Videos with Menu</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.0/dist/reveal.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.0/dist/theme/black.css">
 
+  <style>
     video {
       width: 100vw;
       height: 100vh;
       object-fit: cover;
+    }
+
+    /* Burger menu */
+    .menu {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 9999;
+    }
+
+    .menu button {
+      font-size: 28px;
+      background: #222;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 6px 10px;
+      cursor: pointer;
+    }
+
+    .menu ul {
+      display: none;
+      position: absolute;
+      top: 50px;
+      right: 0;
+      background: rgba(0, 0, 0, 0.9);
+      list-style: none;
+      margin: 0;
+      padding: 10px;
+      border-radius: 6px;
+    }
+
+    .menu ul li {
+      margin: 5px 0;
+    }
+
+    .menu ul li a {
+      color: #fff;
+      text-decoration: none;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .menu ul.show {
       display: block;
     }
   </style>
 </head>
 <body>
+  <!-- Floating Menu -->
+  <div class="menu">
+    <button id="menuBtn">&#9776;</button>
+    <ul id="menuList">
+      <li><a onclick="Reveal.slide(0)">Video 1</a></li>
+      <li><a onclick="Reveal.slide(1)">Video 2</a></li>
+      <li><a onclick="Reveal.slide(2)">Video 3</a></li>
+      <li><a onclick="Reveal.slide(3)">Video 4</a></li>
+    </ul>
+  </div>
 
-  <video loop muted autoplay playsinline>
-    <source src="https://fp-assets.alvarotrigo.com/videos/forest.mp4" type="video/mp4">
-    <source src="https://fp-assets.alvarotrigo.com/videos/forest.webm" type="video/webm">
-  </video>
+  <div class="reveal">
+    <div class="slides">
+      <section><video src="video1.mp4" autoplay muted loop playsinline></video></section>
+      <section><video src="video2.mp4" autoplay muted loop playsinline></video></section>
+      <section><video src="video3.mp4" autoplay muted loop playsinline></video></section>
+      <section><video src="video4.mp4" autoplay muted loop playsinline></video></section>
+    </div>
+  </div>
 
-  <video loop muted autoplay playsinline>
-    <source src="https://fp-assets.alvarotrigo.com/videos/forest-snow.mp4" type="video/mp4">
-    <source src="https://fp-assets.alvarotrigo.com/videos/forest-snow.webm" type="video/webm">
-  </video>
-
-  <video loop muted autoplay playsinline>
-    <source src="https://fp-assets.alvarotrigo.com/videos/slider-effects.mp4" type="video/mp4">
-    <source src="https://fp-assets.alvarotrigo.com/videos/slider-effects.webm" type="video/webm">
-  </video>
-
-  <video loop muted autoplay playsinline>
-    <source src="https://fp-assets.alvarotrigo.com/videos/circle.mp4" type="video/mp4">
-    <source src="https://fp-assets.alvarotrigo.com/videos/circle.webm" type="video/webm">
-  </video>
-
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.6.0/dist/reveal.js"></script>
   <script>
-    // Ensure autoplay works on all browsers
-    document.querySelectorAll('video').forEach(video => {
-      video.muted = true;
-      video.play().catch(() => console.log('Autoplay blocked'));
+    Reveal.initialize({
+      hash: true,
+      controls: false,
+      progress: false,
+      slideNumber: false,
+      keyboard: true
     });
-  </script>
 
+    // Toggle burger menu
+    document.getElementById('menuBtn').onclick = function() {
+      document.getElementById('menuList').classList.toggle('show');
+    };
+  </script>
 </body>
 </html>
